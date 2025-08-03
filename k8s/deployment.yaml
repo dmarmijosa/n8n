@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n8n
+  namespace: n8n
+  labels:
+    app: n8n
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n8n
+  template:
+    metadata:
+      labels:
+        app: n8n
+    spec:
+      containers:
+      - name: n8n
+        image: n8nio/n8n:latest
+        ports:
+        - containerPort: 5678
+          name: http
+        env:
+        - name: N8N_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: N8N_HOST
+        - name: N8N_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: N8N_PORT
+        - name: N8N_PROTOCOL
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: N8N_PROTOCOL
+        - name: WEBHOOK_URL
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: WEBHOOK_URL
+        - name: GENERIC_TIMEZONE
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: GENERIC_TIMEZONE
+        - name: N8N_LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: N8N_LOG_LEVEL
+        - name: N8N_METRICS
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: N8N_METRICS
+        - name: N8N_DISABLE_UI
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: N8N_DISABLE_UI
+        - name: N8N_ENCRYPTION_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: n8n-config
+              key: N8N_ENCRYPTION_KEY
+        - name: N8N_BASIC_AUTH_USER
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: N8N_BASIC_AUTH_USER
+        - name: N8N_BASIC_AUTH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: n8n-secrets
+              key: N8N_BASIC_AUTH_PASSWORD
+        volumeMounts:
+        - name: n8n-data
+          mountPath: /home/node/.n8n
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 5678
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 5678
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: n8n-data
+        persistentVolumeClaim:
+          claimName: n8n-data

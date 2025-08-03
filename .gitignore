@@ -1,0 +1,9 @@
+# N8N Kubernetes Deployment
+
+node_modules/
+*.log
+.env
+.DS_Store
+*~
+.vscode/
+.idea/
