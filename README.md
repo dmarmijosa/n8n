@@ -37,23 +37,43 @@ Las credenciales están configuradas en el archivo secret.yaml
 - `nodePort`: Puerto 30678 (o cambia según tu preferencia)
 
 #### Application (`argocd/application.yaml`)
-- `repoURL`: Cambia por tu repositorio Git
+- `repoURL`: Ya configurado con https://github.com/dmarmijosa/n8n.git
 
 ### 2. Subir a Git Repository
 
-```bash
-git init
-git add .
-git commit -m "Initial n8n deployment configuration"
-git remote add origin https://github.com/tu-usuario/n8n-k8s.git
-git push -u origin main
+Este paso ya está completado. El repositorio está en:
+```
+https://github.com/dmarmijosa/n8n
 ```
 
-### 3. Aplicar en ArgoCD
+### 3. Aplicar en ArgoCD (SSH Remoto)
 
+**Conectado via SSH al servidor:**
 ```bash
+# Clonar el repositorio en el servidor
+git clone https://github.com/dmarmijosa/n8n.git
+cd n8n
+
+# Hacer ejecutable el script y ejecutar
+chmod +x deploy-remote.sh
+./deploy-remote.sh
+```
+
+**Manualmente:**
+```bash
+# Aplicar la aplicación de ArgoCD
 kubectl apply -f argocd/application.yaml
 ```
+
+**Opción alternativa: Através de la UI de ArgoCD**
+1. Accede a la interfaz web de ArgoCD en tu servidor
+2. Crea una nueva aplicación con estos datos:
+   - **Application Name**: `n8n`
+   - **Project**: `default`
+   - **Repository URL**: `https://github.com/dmarmijosa/n8n.git`
+   - **Path**: `k8s`
+   - **Cluster URL**: `https://kubernetes.default.svc`
+   - **Namespace**: `n8n`
 
 ### 4. Configurar nginx proxy manager
 
@@ -70,15 +90,14 @@ En la pestaña SSL:
 - **Force SSL**: ✓
 - **HTTP/2 Support**: ✓
 
-## Verificación del Despliegue
+## Verificación del Despliegue (Remoto)
 
-### 1. Verificar en ArgoCD
-```bash
-kubectl get applications -n argocd
-kubectl describe application n8n -n argocd
-```
+### 1. Verificar en ArgoCD UI
+- Accede a tu interfaz de ArgoCD
+- Busca la aplicación `n8n`
+- Verifica que esté sincronizada y sin errores
 
-### 2. Verificar recursos en Kubernetes
+### 2. Verificar recursos en Kubernetes (si tienes acceso kubectl)
 ```bash
 kubectl get all -n n8n
 kubectl get pvc -n n8n
