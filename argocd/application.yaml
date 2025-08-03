@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/dmarmijosa/n8n-k8s.git
+    repoURL: https://github.com/dmarmijosa/n8n.git
     targetRevision: main
     path: k8s
   destination:
