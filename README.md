@@ -31,11 +31,7 @@ Antes de desplegar, asegúrate de modificar los siguientes archivos:
 - `N8N_ENCRYPTION_KEY`: Genera una clave segura
 
 #### Secret (`k8s/secret.yaml`)
-Las credenciales están configuradas:
-```bash
-# Usuario: admin
-# Password: 1225161930
-```
+Las credenciales están configuradas en el archivo secret.yaml
 
 #### Service (`k8s/service.yaml`)
 - `nodePort`: Puerto 30678 (o cambia según tu preferencia)
@@ -98,8 +94,7 @@ kubectl get svc n8n-service -n n8n
 
 Una vez configurado nginx proxy manager:
 - URL: `https://n8n.dmarmijosa.com`
-- Usuario: `admin`
-- Password: `1225161930`
+- Las credenciales están configuradas en el secret de Kubernetes
 
 ## Solución de Problemas
 
