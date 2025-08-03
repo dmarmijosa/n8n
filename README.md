@@ -48,7 +48,7 @@ https://github.com/dmarmijosa/n8n
 
 ### 3. Aplicar en ArgoCD (SSH Remoto)
 
-**Conectado via SSH al servidor:**
+**Conectado via SSH al servidor (MicroK8s):**
 ```bash
 # Clonar el repositorio en el servidor
 git clone https://github.com/dmarmijosa/n8n.git
@@ -62,7 +62,7 @@ chmod +x deploy-remote.sh
 **Manualmente:**
 ```bash
 # Aplicar la aplicación de ArgoCD
-kubectl apply -f argocd/application.yaml
+microk8s kubectl apply -f argocd/application.yaml
 ```
 
 **Opción alternativa: Através de la UI de ArgoCD**
@@ -99,14 +99,14 @@ En la pestaña SSL:
 
 ### 2. Verificar recursos en Kubernetes (si tienes acceso kubectl)
 ```bash
-kubectl get all -n n8n
-kubectl get pvc -n n8n
-kubectl logs -f deployment/n8n -n n8n
+microk8s kubectl get all -n n8n
+microk8s kubectl get pvc -n n8n
+microk8s kubectl logs -f deployment/n8n -n n8n
 ```
 
 ### 3. Verificar NodePort
 ```bash
-kubectl get svc n8n-service -n n8n
+microk8s kubectl get svc n8n-service -n n8n
 ```
 
 ## Acceso a n8n
@@ -119,12 +119,12 @@ Una vez configurado nginx proxy manager:
 
 ### Logs de n8n
 ```bash
-kubectl logs -f deployment/n8n -n n8n
+microk8s kubectl logs -f deployment/n8n -n n8n
 ```
 
 ### Estado de ArgoCD
 ```bash
-kubectl get application n8n -n argocd -o yaml
+microk8s kubectl get application n8n -n argocd -o yaml
 ```
 
 ### Verificar conectividad NodePort
